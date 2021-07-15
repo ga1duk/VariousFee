@@ -1,8 +1,8 @@
 fun main() {
-    println(transfer(cardType = "Maestro", currentTransfer = 10_000_00))
+    println(transfer(cardType = "Maestro", previousTransfers = 100_000_00, currentTransfer = 10_000_00))
 }
 
-fun transfer(cardType: String = "VK Pay", previousTransfers: Int = 100_000_00, currentTransfer: Int): Int {
+fun transfer(cardType: String = "VK Pay", previousTransfers: Int = 0, currentTransfer: Int): Int {
     val feeInPercent = 0.0075
     val feeInPercentMaestro = 0.006
     val floatingFeeMaestro = (currentTransfer * feeInPercentMaestro).toInt() + 2000
