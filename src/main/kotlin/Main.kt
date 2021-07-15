@@ -1,18 +1,18 @@
 fun main() {
-    println(transfer(cardType = "Maestro", previousTransfers = 100_000_00, currentTransfer = 10_000_00))
+    println(countFee(payType = "Maestro", previousTransfers = 75_000_00, currentTransfer = 10_000_00))
 }
 
-fun transfer(cardType: String = "VK Pay", previousTransfers: Int = 0, currentTransfer: Int): Int {
-    val feeInPercent = 0.0075
-    val feeInPercentMaestro = 0.006
-    val floatingFeeMaestro = (currentTransfer * feeInPercentMaestro).toInt() + 2000
-    val minimalFee = 3500
-    val floatingFee = (currentTransfer * feeInPercent).toInt()
-    var totalFee = 0
-    when (cardType) {
-        "VK Pay" -> totalFee = 0
-        "Visa", "Мир" -> totalFee = if (floatingFee <= minimalFee) minimalFee else floatingFee
-        "MasterCard", "Maestro" -> totalFee = if (previousTransfers <= 75_000_00) 0 else floatingFeeMaestro
+fun countFee(payType: String = "VK Pay", previousTransfers: Int = 0, currentTransfer: Int): Int {
+    val feeInPercentVisaMir = 0.0075
+    val feeInPercentMasterMaestro = 0.006
+    val minimalFeeVisaMir = 3500
+    val floatingFeeVisaMir = (currentTransfer * feeInPercentVisaMir).toInt()
+    val floatingFeeMasterMaestro = (currentTransfer * feeInPercentMasterMaestro).toInt() + 2000
+
+    return when (payType) {
+        "VK Pay" -> 0
+        "Visa", "Мир" -> if (floatingFeeVisaMir <= minimalFeeVisaMir) minimalFeeVisaMir else floatingFeeVisaMir
+        "MasterCard", "Maestro" -> if (previousTransfers < 75_000_00) 0 else floatingFeeMasterMaestro
+        else -> throw Exception("Такого способа оплаты не существует")
     }
-    return totalFee
 }
